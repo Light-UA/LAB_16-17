@@ -1,0 +1,152 @@
+using System;
+
+public class Car
+{
+    // Закриті поля
+    private string _brand;
+    private int _year;
+    private int _power;
+    private double _price;
+    private int _quantity;
+
+    // Конструктор без параметрів
+    public Car()
+    {
+        _brand = "Unknown";
+        _year = 2000;
+        _power = 0;
+        _price = 0.0;
+        _quantity = 0;
+    }
+
+    // Конструктор з параметрами
+    public Car(string brand, int year, int power, double price, int quantity)
+    {
+        _brand = brand;
+        _year = year;
+        _power = power;
+        _price = price;
+        _quantity = quantity;
+    }
+
+    // Властивості для доступу до полів
+    public string Brand
+    {
+        get { return _brand; }
+        set { _brand = value; }
+    }
+
+    public int Year
+    {
+        get { return _year; }
+        set { _year = value; }
+    }
+
+    public int Power
+    {
+        get { return _power; }
+        set { _power = value; }
+    }
+
+    public double Price
+    {
+        get { return _price; }
+        set { _price = value; }
+    }
+
+    public int Quantity
+    {
+        get { return _quantity; }
+        set { _quantity = value; }
+    }
+
+    // Метод для обчислення загальної вартості автомобілів даної марки
+    public double CalculateTotalValue()
+    {
+        return _price * _quantity;
+    }
+
+    // Метод для виведення інформації про автомобіль
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"Марка: {_brand}, Рік: {_year}, Потужність: {_power} к.с., Ціна: {_price}$, Кількість: {_quantity}");
+    }
+
+    // Перевантаження оператора ==
+    public static bool operator ==(Car c1, Car c2)
+    {
+        return c1._brand == c2._brand && c1._year == c2._year;
+    }
+
+    // Перевантаження оператора !=
+    public static bool operator !=(Car c1, Car c2)
+    {
+        return !(c1 == c2);
+    }
+
+    // Перевантаження оператора >
+    public static bool operator >(Car c1, Car c2)
+    {
+        return c1._price > c2._price;
+    }
+
+    // Перевантаження оператора <
+    public static bool operator <(Car c1, Car c2)
+    {
+        return c1._price < c2._price;
+    }
+
+    // Перевизначення методу Equals
+    public override bool Equals(object obj)
+    {
+        if (obj is Car)
+        {
+            Car car = (Car)obj;
+            return this == car;
+        }
+        return false;
+    }
+
+    // Перевизначення методу GetHashCode
+    public override int GetHashCode()
+    {
+        return _brand.GetHashCode() ^ _year.GetHashCode();
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Створення трьох об'єктів
+        Car car1 = new Car("Toyota", 2015, 200, 15000, 3);
+        Car car2 = new Car("BMW", 2020, 250, 30000, 2);
+        Car car3 = new Car("Toyota", 2018, 180, 12000, 5);
+
+        // Виведення інформації про автомобілі
+        car1.DisplayInfo();
+        car2.DisplayInfo();
+        car3.DisplayInfo();
+
+        // Використання перевантажених операторів
+        Console.WriteLine($"\nЧи однакові марки і роки у car1 та car3? {car1 == car3}");
+        Console.WriteLine($"Чи дорожчий car2 за car1? {car2 > car1}");
+
+        // Масив об'єктів
+        Car[] cars = { car1, car2, car3 };
+
+        // Пошук автомобіля за маркою
+        string searchBrand = "Toyota";
+        double totalValue = 0;
+        foreach (Car car in cars)
+        {
+            if (car.Brand == searchBrand)
+            {
+                totalValue += car.CalculateTotalValue();
+            }
+        }
+
+        Console.WriteLine($"\nЗагальна вартість всіх автомобілів марки {searchBrand}: {totalValue}$");
+        Console.ReadLine();
+    }
+}
